@@ -6,21 +6,37 @@ import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings('ignore')
 
+# Small helper functions for exponent and dot product
+def exp(x): return np.exp(x) 
+def dot(x, w): return np.dot(x, w)
+
+def sigmoid(x):
+    """
+    Given a single value x, return the output of the sigmoid activation function.
+
+    HINT: You can use the help exp(x) function above for e^x
+    HINT: The formula for sigmoid can be found on Wikipedia:
+          https://en.wikipedia.org/wiki/Sigmoid_function
+    """
+    ## YOUR CODE HERE
+    return 1 / (1 + exp(-x))
+    ## END YOUR CODE
+
 def predict_probability(data, weights):
     """
     Use the data and weights to calculate a probability for each data point.
     For example, if "data" has 100 rows, this function should return an array
     with 100 numbers between 0 and 1.
 
-    HINT: "dot products" can be done with np.dot(...)
+    HINT: "dot products" can be done with dot(x, w), where w are weights and x are values.
     HINT: Use the sigmoid function which can be called with s_curve(...)
     HINT: data is of shape (dataset size, num features), and weights is 
     of shape (num features, 1)
     """
     pred = None
     ## YOUR CODE HERE
-    val = np.dot(data, weights)
-    pred = s_curve(val)
+    val = dot(data, weights)
+    pred = sigmoid(val)
     ## END YOUR CODE
     return pred[...,None]
 
@@ -36,7 +52,7 @@ def sgd(data, labels, weights, learning_rate, regularization_rate):
     regression rule, and then perform the regularization update.
     """
     ## YOUR CODE HERE
-    #probs = predict_probability(data, weights)
+    probs = predict_probability(data, weights)
     for i in range(data.shape[0]):
         prob = predict_probability(data[i, :], weights)
         weights += learning_rate*data[i, :]*(labels[i] - prob)
