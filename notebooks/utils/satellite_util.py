@@ -29,19 +29,25 @@ with h5py.File("./data/assorted_images/satellite_images.h5","r") as hf:
     labels = np.concatenate([np.zeros(n), np.ones(n)])[p]
 
 def display(guesses = None):
-    f, axs = plt.subplots(2,n, figsize=(20, 10))
+    f, axs = plt.subplots(2, n, figsize=(20, 10))
     index_to_label = {}
     for i, ax in enumerate(range(2 * n)):
         ax = axs[i % 2, i // 2]
         index = str(i // 2 + (n * (i % 2)))
 
-        img = images[i]
+        img = images[int(index)]
+        img_cp = np.copy(img)
+        print(labels)
+        if guesses: print(guesses)
         # decorate axes
         if guesses is None:
             ax.set_title(index)
         else:
-            y_true = int(labels[i])
-            y_pred = int(index in guesses.split(","))
+            y_true = int(labels[int(index)])
+            print(guesses.split(","))
+            y_pred = 1 if int(index) in [int(x) for x in guesses.split(",")] else 0
+            print([int(x) for x in guesses.split(",")])
+            print("y pred", y_pred)
             ax.set_title("{} \n (TRUTH: {}; YOUR GUESS: {})".format(
                 index,
                 y_true,
@@ -49,17 +55,17 @@ def display(guesses = None):
                 )
 
             if y_true == y_pred:
-                img[:,:,0] = (img[:,:,0] * 0.7).astype('uint8')
-                img[:,:,2] = (img[:,:,2] * 0.7).astype('uint8')
+                img_cp[:,:,0] = (img[:,:,0] * 0.7).astype('uint8')
+                img_cp[:,:,2] = (img[:,:,2] * 0.7).astype('uint8')
             else:
-                img[:,:,1] = (img[:,:,1] * 0.7).astype('uint8')
-                img[:,:,2] = (img[:,:,2] * 0.7).astype('uint8')
+                img_cp[:,:,1] = (img[:,:,1] * 0.7).astype('uint8')
+                img_cp[:,:,2] = (img[:,:,2] * 0.7).astype('uint8')
 
-        ax.imshow(img)
+        ax.imshow(img_cp)
         ax.get_xaxis().set_visible(False)
         ax.get_yaxis().set_visible(False)
 
-        index_to_label[index] = labels[i]
+        index_to_label[index] = labels[int(index)]
     plt.show()
     return index_to_label
 
@@ -73,7 +79,14 @@ def start_quiz():
 def compute_results(guesses, truth):
     _ = display(guesses = guesses)
     guesses = [digit.strip() for digit in guesses.split(",")]
-    acc = np.sum([truth[str(g)] for g in guesses]) / float(n)
+    print(guesses)
+    acc = np.sum([truth[str(g)] for g in guesses]) 
+    for key, value in truth.items():
+        if value == 0 and key not in guesses:
+            acc += 1
+    acc = acc / float(2 * n)
+    print(truth)
+    print([truth[str(g)] for g in guesses])
     print("Your accuracy was: {}%".format(acc * 100.))
 
 def get_coordinate_list(num_locations = 200):
