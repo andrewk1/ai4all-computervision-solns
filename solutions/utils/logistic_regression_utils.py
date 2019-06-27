@@ -6,7 +6,7 @@ sys.path.append("../")
 from color_histograms_utils import feat_extract
 from scipy.stats import mode
 
-from project.metrics import *
+from machine_learning.metrics import *
 
 import matplotlib.pyplot as plt
 

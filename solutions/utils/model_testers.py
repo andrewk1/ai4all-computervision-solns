@@ -1,4 +1,4 @@
-from project.model_helpers import *
+from machine_learning.model_helpers import *
 import numpy as np
 
 def test_predict_probability():
