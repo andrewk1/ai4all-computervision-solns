@@ -29,7 +29,7 @@ def predict_probability(data, weights):
     with 100 numbers between 0 and 1.
 
     HINT: "dot products" can be done with dot(x, w), where w are weights and x are values.
-    HINT: Use the sigmoid function which can be called with s_curve(...)
+    HINT: Use the sigmoid function which can be called with your sigmoid(x)
     HINT: data is of shape (dataset size, num features), and weights is 
     of shape (num features, 1)
     """
