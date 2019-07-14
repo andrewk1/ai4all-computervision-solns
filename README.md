@@ -1,4 +1,4 @@
-# Satellite Imaging Project: Stanford AI4ALL 2018
+# Satellite Imaging Project: Stanford AI4ALL 2019
 
 
 ## Prerequisites
